@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -24,11 +25,10 @@ public class InventoryManagementApplication extends Application {
     public void start(Stage stage) {
         try {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Gui.fxml")));
-
+            stage.initStyle(StageStyle.TRANSPARENT);
             assert root != null;
             Scene scene = new Scene(root, 1150, 700);
             stage.setScene(scene);
-            stage.setTitle("Inventory Management Application");
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

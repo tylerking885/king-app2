@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.5" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="293.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
-    <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="1149.0" style="-fx-background-color: black;">
+    <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleClickAction" onMouseDragged="#handleMovementAction" prefHeight="85.0" prefWidth="1149.0" style="-fx-background-color: black;">
       <MenuButton fx:id="fileMenuButton" alignment="TOP_LEFT" layoutX="6.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="File" textFill="WHITE">
         <items>
             <MenuItem mnemonicParsing="false" onAction="#menuLoadPicked" text="Load" />
@@ -23,8 +23,8 @@
             <Font size="13.0" />
          </font>
       </MenuButton>
-      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1089.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="-" textFill="WHITE" />
-      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1117.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
+      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1089.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleMinAction" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="-" textFill="WHITE" />
+      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1117.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleCloseAction" onMouseEntered="#hoverOnCloseBt" onMouseExited="#hoverOffCloseBt" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
       <Label layoutX="70.0" layoutY="5.0" text="InventoryManagement.exe" textFill="WHITE" />
         <AnchorPane layoutX="-10.0" layoutY="46.0" prefHeight="42.0" prefWidth="1160.0" style="-fx-background-color: grey;">
             <Button fx:id="addButton" alignment="CENTER" layoutX="868.0" layoutY="5.0" mnemonicParsing="false" onAction="#addEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Add" textFill="WHITE">

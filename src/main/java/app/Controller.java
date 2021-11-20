@@ -15,8 +15,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -25,6 +27,7 @@ import org.jsoup.select.Elements;
 import java.io.*;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -81,7 +84,6 @@ public class Controller implements Initializable {
     @FXML
     AnchorPane anchorPane;
 
-    @FXML
     private final FileChooser fileChooser = new FileChooser();
 
     ObservableList<LocalEvent> listMaster = FXCollections.observableArrayList();
@@ -1193,7 +1195,7 @@ public class Controller implements Initializable {
                     // set the table to the filtered list
                     table.setItems(listFiltered);
 
-                    // finally break from the loop.
+                    // Finally, break from the loop.
                     break;
                 }
             }
@@ -1277,7 +1279,7 @@ public class Controller implements Initializable {
                 // If there isn't an edit dupCheck is made true.
                 boolean doDupCheck = !serialNumber.equals(backup);
 
-                // If the text fields are valid and dupcheck passes
+                // If the text fields are valid and dupCheck passes
                 if (validateFields(validateTitle) && (!doDupCheck||validateDuplicateForEdit(serialNumber))) {
 
                     // Get the event strings and set them in their respective text fields.
@@ -1298,7 +1300,7 @@ public class Controller implements Initializable {
                         localEventEdit.setValue(value);
                     }
 
-                    // Set the boolean edit togle to false.
+                    // Set the boolean edit toggle to false.
                     editModeToggle = false;
 
                     // Set the edit button to say edit.
@@ -1334,5 +1336,85 @@ public class Controller implements Initializable {
             // Refresh the table.
             table.refresh();
         }
+    }
+
+    public boolean displayModalPopup() {
+
+        // Create a new Alert object of type WARNING.
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+        // Information to be displayed in warning.
+        alert.setTitle("Unsaved data warning");
+        alert.setContentText("There is unsaved data. Do you want to continue and lose data ?");
+
+        // Returns true if user clicks OK.
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.filter(buttonType -> buttonType == ButtonType.OK).isPresent();
+    }
+
+    @FXML
+    protected void handleMinAction() {
+
+        // Get the scene of the stage.
+        Stage stage = (Stage) buttonMin.getScene().getWindow();
+
+        // Iconify the stage (Minimize).
+        stage.setIconified(true);
+    }
+
+    @FXML
+    public void handleCloseAction() {
+
+        // First check for any unsaved changes
+        if (unsavedChanges) {
+
+            // Set the return of the Unsaved changes Alert to a boolean variable.
+            boolean decision = displayModalPopup();
+
+            // If user indeed wishes to close then close.
+            if (decision) {
+                Stage stage = (Stage) buttonClose.getScene().getWindow();
+                stage.close();
+            }
+            // Else break from the close action.
+            if (!decision)
+                return;
+        }
+
+        // If there weren't any unsaved changes to begin with then just close.
+        Stage stage = (Stage) buttonClose.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    protected void handleClickAction(MouseEvent event) {
+
+        //
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        xOffset = stage.getX() - event.getScreenX();
+        yOffset = stage.getY() - event.getScreenY();
+    }
+
+    @FXML
+    protected void handleMovementAction(MouseEvent event) {
+
+        // Logic for tracking movement.
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        stage.setX(event.getScreenX() + xOffset);
+        stage.setY(event.getScreenY() + yOffset);
+    }
+
+    @FXML
+    public void hoverOnCloseBt(){
+
+        // Sets the color of the button to red when hovering on it.
+        buttonClose.setStyle("-fx-background-color: #fc0303;");
+    }
+
+    @FXML
+    public void hoverOffCloseBt(){
+
+        // Revert to normal when not hovering on the button.
+        buttonClose.setStyle("-fx-background-color: #1b1b1c;"+"-fx-border-color: white;");
     }
 }
