@@ -28,6 +28,7 @@ public class InventoryManagementApplication extends Application {
             stage.initStyle(StageStyle.TRANSPARENT);
             assert root != null;
             Scene scene = new Scene(root, 1150, 700);
+            scene.getStylesheets().add((Objects.requireNonNull(getClass().getResource("Application-Style.css"))).toExternalForm());
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
