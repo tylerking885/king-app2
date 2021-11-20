@@ -13,26 +13,26 @@
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.5" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="293.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="1149.0" style="-fx-background-color: black;">
-      <MenuButton alignment="TOP_LEFT" layoutX="6.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="File" textFill="WHITE">
+    <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="1149.0" style="-fx-background-color: black;">
+      <MenuButton fx:id="fileMenuButton" alignment="TOP_LEFT" layoutX="6.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="File" textFill="WHITE">
         <items>
-            <MenuItem mnemonicParsing="false" text="Load" />
-          <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" onAction="#menuLoadPicked" text="Load" />
+          <MenuItem mnemonicParsing="false" onAction="#menuSavePicked" text="Save" />
         </items>
          <font>
             <Font size="13.0" />
          </font>
       </MenuButton>
-      <Button alignment="CENTER" layoutX="1089.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="-" textFill="WHITE" />
-      <Button alignment="CENTER" layoutX="1117.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
+      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1089.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="-" textFill="WHITE" />
+      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1117.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
       <Label layoutX="70.0" layoutY="5.0" text="InventoryManagement.exe" textFill="WHITE" />
         <AnchorPane layoutX="-10.0" layoutY="46.0" prefHeight="42.0" prefWidth="1160.0" style="-fx-background-color: grey;">
-            <Button alignment="CENTER" layoutX="868.0" layoutY="5.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Add" textFill="WHITE">
+            <Button fx:id="addButton" alignment="CENTER" layoutX="868.0" layoutY="5.0" mnemonicParsing="false" onAction="#addEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Add" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Button>
-            <TextField id="#FFA500" alignment="CENTER" layoutX="24.0" layoutY="6.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Serial Number here..." style="-fx-background-color: #1b1b1c;" styleClass="text-field" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css">
+            <TextField id="#FFA500" fx:id="descriptionTextFieldSN" alignment="CENTER" layoutX="24.0" layoutY="6.0" prefHeight="27.0" prefWidth="238.0" promptText="Enter Serial Number here..." style="-fx-background-color: #1b1b1c;" styleClass="text-field" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css">
                 <font>
                     <Font name="System Bold Italic" size="13.0" />
                 </font>
@@ -40,17 +40,17 @@
                     <Glow />
                 </effect>
           </TextField>
-            <Button alignment="CENTER" layoutX="984.0" layoutY="5.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Delete" textFill="WHITE">
+            <Button fx:id="deleteButton" alignment="CENTER" layoutX="984.0" layoutY="5.0" mnemonicParsing="false" onAction="#deleteEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Delete" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Button>
-            <Button alignment="CENTER" layoutX="927.0" layoutY="5.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Edit" textFill="WHITE">
+            <Button fx:id="editButton" alignment="CENTER" layoutX="927.0" layoutY="5.0" mnemonicParsing="false" onAction="#editEvent" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Edit" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Button>
-            <TextField alignment="CENTER" layoutX="273.0" layoutY="6.0" prefHeight="25.0" prefWidth="366.0" promptText="Enter Name here..." style="-fx-background-color: #1b1b1c;" styleClass="text-field" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css">
+            <TextField fx:id="descriptionTextFieldName" alignment="CENTER" layoutX="273.0" layoutY="6.0" prefHeight="25.0" prefWidth="366.0" promptText="Enter Name here..." style="-fx-background-color: #1b1b1c;" styleClass="text-field" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css">
                 <font>
                     <Font name="System Bold Italic" size="13.0" />
                 </font>
@@ -58,7 +58,7 @@
                     <Glow />
                 </effect>
             </TextField>
-            <TextField alignment="CENTER" layoutX="650.0" layoutY="6.0" prefHeight="27.0" prefWidth="205.0" promptText="Enter Value here..." style="-fx-background-color: #1b1b1c;" styleClass="text-field" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css">
+            <TextField fx:id="descriptionTextFieldValue" alignment="CENTER" layoutX="650.0" layoutY="6.0" prefHeight="27.0" prefWidth="205.0" promptText="Enter Value here..." style="-fx-background-color: #1b1b1c;" styleClass="text-field" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css">
                 <font>
                     <Font name="System Bold Italic" size="13.0" />
                 </font>
@@ -66,14 +66,14 @@
                     <Glow />
                 </effect>
             </TextField>
-            <MenuButton alignment="TOP_RIGHT" layoutX="1056.0" layoutY="5.0" mnemonicParsing="false" popupSide="RIGHT" style="-fx-border-color: white; -fx-background-color: #1b1b1c; -fx-background-insets-color: #1b1b1c; -fx-background-insets-text-color: white;" text="Options" textFill="WHITE">
+            <MenuButton fx:id="optionsMenuButton" alignment="TOP_RIGHT" layoutX="1056.0" layoutY="5.0" mnemonicParsing="false" popupSide="RIGHT" style="-fx-border-color: white; -fx-background-color: #1b1b1c; -fx-background-insets-color: #1b1b1c; -fx-background-insets-text-color: white;" text="Options" textFill="WHITE">
                 <items>
-                    <MenuItem mnemonicParsing="false" text="Delete All" />
-                    <MenuItem mnemonicParsing="false" text="Search (SN)" />
-                    <MenuItem mnemonicParsing="false" text="Search (Name)" />
-                    <MenuItem mnemonicParsing="false" text="Sort (SN)" />
-                    <MenuItem mnemonicParsing="false" text="Sort (Name)" />
-                    <MenuItem mnemonicParsing="false" text="Sort (Value)" />
+                    <MenuItem mnemonicParsing="false" onAction="#deleteAllEntries" text="Delete All" />
+                    <MenuItem mnemonicParsing="false" onAction="#searchSerialNumberOfEntries" text="Search (SN)" />
+                    <MenuItem mnemonicParsing="false" onAction="#searchNameOfEntries" text="Search (Name)" />
+                    <MenuItem mnemonicParsing="false" onAction="#sortEntriesBySerialNumber" text="Sort (SN)" />
+                    <MenuItem mnemonicParsing="false" onAction="#sortEntriesByName" text="Sort (Name)" />
+                    <MenuItem mnemonicParsing="false" onAction="#sortEntriesByLeastValue" text="Sort (Value)" />
                 </items>
                 <font>
                     <Font size="13.0" />
@@ -81,11 +81,11 @@
             </MenuButton>
         </AnchorPane>
     </AnchorPane>
-   <TableView maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1143.0" SplitPane.resizableWithParent="false">
+   <TableView fx:id="table" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1143.0" SplitPane.resizableWithParent="false">
      <columns>
-       <TableColumn editable="false" prefWidth="159.0" sortable="false" text="Serial Number" />
-       <TableColumn editable="false" prefWidth="763.0" sortable="false" text="Item Name" />
-         <TableColumn editable="false" prefWidth="225.0" sortable="false" text="Item Value" />
+       <TableColumn fx:id="serialNumber" editable="false" prefWidth="159.0" sortable="false" text="Serial Number" />
+       <TableColumn fx:id="name" editable="false" prefWidth="763.0" sortable="false" text="Item Name" />
+         <TableColumn fx:id="value" editable="false" prefWidth="225.0" sortable="false" text="Item Value" />
      </columns>
    </TableView>
 </SplitPane>

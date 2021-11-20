@@ -5,526 +5,1196 @@
 
 package app;
 
-public class Controller {
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-    /*
-        Class Controller will begin with all the javaFX control declarations.
+import java.io.*;
+import java.net.URL;
+import java.util.Comparator;
+import java.util.ResourceBundle;
+
+public class Controller implements Initializable {
+
+    private boolean unsavedChanges = false;
+    private boolean editModeToggle = false;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+    private LocalEvent localEventEdit;
+
+    // Class Controller will begin with all the javaFX control declarations.
+
+    @FXML
+    private TableView<LocalEvent> table;
+    @FXML
+    private TableColumn<LocalEvent, String> serialNumber;
+    @FXML
+    private TableColumn<LocalEvent, String> name;
+    @FXML
+    private TableColumn<LocalEvent, String> value;
+
+    @FXML
+    Button addButton;
+
+    @FXML
+    Button deleteButton;
+
+    @FXML
+    private Button buttonMin;
+
+    @FXML
+    private Button buttonClose;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private MenuButton fileMenuButton;
+
+    @FXML
+    MenuButton optionsMenuButton;
+
+    @FXML
+    private TextField descriptionTextFieldSN;
+
+    @FXML
+    private TextField descriptionTextFieldName;
+
+    @FXML
+    private TextField descriptionTextFieldValue;
+
+    @FXML
+    AnchorPane anchorPane;
+
+    @FXML
+    private final FileChooser fileChooser = new FileChooser();
+
+    ObservableList<LocalEvent> listMaster = FXCollections.observableArrayList();
+    ObservableList<LocalEvent> listFiltered = FXCollections.observableArrayList();
 
 
-        @Override
-        public void initialize(URL location, ResourceBundle resources) {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
-           // Set the serial number column for the table view.
+        // Set the serial number column for the table view.
+        serialNumber.setCellValueFactory(new PropertyValueFactory<>("SerialNumber"));
+        // Set the name column for the table view.
+        name.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        // Set the value column for the table view.
+        value.setCellValueFactory(new PropertyValueFactory<>("Value"));
+        // Make the table view a static size.
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // Set the table view to the master ObservableList.
+        table.setItems(listMaster);
+    }
 
-           // Set the name column for the table view.
+    public void refreshDescriptionFields() {
 
-           // Set the value column for the table view.
+        // clear out all the text fields.
+        descriptionTextFieldSN.setText("");
+        descriptionTextFieldName.setText("");
+        descriptionTextFieldValue.setText("");
+    }
 
-           // Make the table view a static size.
+    // String variables used for Regex.
+    String validateTitle = "Validate Fields";
+    String SNFormat = "[a-zA-Z]-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}";
+    String valueFormat = "^\\$??(((\\d{1,3},?)(\\d{3},?)+|\\d{1,3})|\\d+)(\\.\\d{1,2})?$";
 
-           // Set the table view to the master ObservableList.
-        }
-
-        // Validates if any entries in the table are currently being selected.
-        private boolean validateSelected(String validateTitle) {
+    // Validates if any entries in the table are currently being selected.
+    private boolean validateSelected(String validateTitle) {
 
         //Create a new Alert object of type WARNING.
+        Alert alert = new Alert(Alert.AlertType.WARNING);
 
         // Grab the index of the current table selection.
+        int selectedID = table.getSelectionModel().getSelectedIndex();
 
         // If nothing is selected show the WARNING and return false.
+        if (selectedID == -1) {
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A list item must be selected.");
+            alert.showAndWait();
 
-        // Else return true.
+            return false;
+        }
+        return true;
+    }
 
+
+    private boolean validateFields(String validateTitle) {
+
+        //Create a new Alert object of type WARNING.
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        // Case 1 : SN is empty / Name is empty / Value is empty
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, Name must be entered, and Value must be entered.");
+            alert.showAndWait();
+
+            return false;
         }
 
+        // Case 2 : SN is empty / Name > 256 / Value is empty.
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName.getText().length() > 256) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
 
-        private boolean validateFields(String validateTitle) {
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, Name must not exceed 256 characters, and Value must be entered.");
+            alert.showAndWait();
 
-            //Create a new Alert object of type WARNING.
-
-            // Case 1 : SN is empty / Name is empty / Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 2 : SN is empty / Name > 256 / Value is empty.
-            //If case is invalid. Show alert and return false;
-
-            // Case 3 : SN is empty / Name < 2 / Value is empty
-            //If case is invalid. Show alert and return false;
-
-            // Case 4 : SN is empty / Value is empty
-            //If case is invalid. Show alert and return false;
-
-            // Case 5 : SN is empty / Name is empty / Value wrong format
-            //If case is invalid. Show alert and return false;
-
-            // Case 6 : SN is empty / Name < 2 / Value wrong format
-            //If case is invalid. Show alert and return false;
-
-            // Case 7 : SN is empty / Name > 256 / Value wrong format
-            //If case is invalid. Show alert and return false;
-
-            // Case 8 : SN wrong format / Name is empty / Value is empty
-            //If case is invalid. Show alert and return false;
-
-            // Case 9 : SN wrong format / Name is empty / Value wrong format
-            //If case is invalid. Show alert and return false;
-
-            // Case 10 : SN wrong format / Name < 2 / Value is empty
-            //If case is invalid. Show alert and return false;
-
-            // Case 11 : SN wrong format / Name < 2 / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 12 : SN wrong format / Name > 256 / Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 13 : SN wrong format / Name > 256 / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 14 : SN is empty / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 15 : SN is empty / Name is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 16 : Name is empty / Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 17 : Name is empty / Value format is wrong
-            // If case is invalid. Show alert and return false;
-
-            // Case 18 : Name > 256 / Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 19 : Name > 256 / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 20 : Name < 2 / Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 21 : Name < 2 / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 22 : SN is empty / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 23 : SN wrong format / Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 24 : SN wrong format / Value wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 25 : SN is empty / Name > 256
-            // If case is invalid. Show alert and return false;
-
-            // Case 26 : SN wrong format / Name > 256
-            // If case is invalid. Show alert and return false;
-
-            // Case 27 : SN is empty / Name < 2
-            // If case is invalid. Show alert and return false;
-
-            // Case 28 : SN wrong format / Name < 2
-            // If case is invalid. Show alert and return false;
-
-            // Case 29 : SN is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 30 : Name is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 31 : Value is empty
-            // If case is invalid. Show alert and return false;
-
-            // Case 32 : SN wrong format
-            // If case is invalid. Show alert and return false;
-
-            // Case 33 : Name > 256
-            // If case is invalid. Show alert and return false;
-
-            // Case 34 : Name < 2
-            // If case is invalid. Show alert and return false;
-
-            // Case 35 : Value wrong format
-            // If case is invalid. Show alert and return false;
-
-
-        //Else return true
+            return false;
         }
 
-        private boolean validateDuplicateForAdd(String validateTitle) {
+        // Case 3 : SN is empty / Name < 2 / Value is empty
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName.getText().length() < 2) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
 
-            //Create a new Alert object of type WARNING.
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, Name must exceed 2 characters, and Value must be entered.");
+            alert.showAndWait();
 
-            // Loop through the Master list using a LocalEvent variable {
+            return false;
+        }
 
-                // If a Serial Number from the master list equals input from the text field.
+        // Case 4 : SN is empty / Value is empty
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, and Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 5 : SN is empty / Name is empty / Value wrong format
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, Name must be entered, and Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 6 : SN is empty / Name < 2 / Value wrong format
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName.getText().length() < 2) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, Name must exceed 2 characters, and Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 7 : SN is empty / Name > 256 / Value wrong format
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName.getText().length() > 256) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, Name must not exceed 256 characters, and Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 8 : SN wrong format / Name is empty / Value is empty
+        if ((!descriptionTextFieldSN.getText().matches(SNFormat)) &&
+                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must be entered, and Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 9 : SN wrong format / Name is empty / Value wrong format
+        if ((!descriptionTextFieldSN.getText().matches(SNFormat)) &&
+                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must be entered, and Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 10 : SN wrong format / Name < 2 / Value is empty
+        if ((!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldName.getText().length() < 2)) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must exceed 2 characters, Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 11 : SN wrong format / Name < 2 / Value wrong format
+        if ((!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldName.getText().length() < 2)) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must exceed 2 characters, and Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 12 : SN wrong format / Name > 256 / Value is empty
+        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldName.getText().length() > 256) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must not exceed 256, and Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 13 : SN wrong format / Name > 256 / Value wrong format
+        if ((!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldName.getText().length() > 256)) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must exceed 256 characters, and Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 14 : SN is empty / Value wrong format
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty())) {
+            assert descriptionTextFieldValue != null;
+            if (!descriptionTextFieldValue.getText().matches(valueFormat)) {
+
+                alert.setTitle(validateTitle);
+                alert.setHeaderText(null);
+                alert.setContentText("A Serial Number must be entered, and Value must be positive and in #.## format.");
+                alert.showAndWait();
+
+                return false;
+            }
+        }
+
+        // Case 15 : SN is empty / Name is empty
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Serial Number must be entered, and the Name must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 16 : Name is empty / Value is empty
+        if ((descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Name must be entered, and Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 17 : Name is empty / Value format is wrong
+        if ((descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Name must be entered, and the Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 18 : Name > 256 / Value is empty
+        if ((descriptionTextFieldName.getText().length() > 256) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("The Name must exceed 256 characters, and the Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 19 : Name > 256 / Value wrong format
+        if ((descriptionTextFieldName.getText().length() > 256) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("The Name must exceed 256 characters, and the Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 20 : Name < 2 / Value is empty
+        if ((descriptionTextFieldName.getText().length() < 2) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("The Name must exceed 2 characters, and the Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 21 : Name < 2 / Value wrong format
+        if ((descriptionTextFieldName.getText().length() < 2) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("The Name must exceed 2 characters, and the Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 22 : SN is empty / Value wrong format
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Serial Number must be entered, and the Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 23 : SN wrong format / Value is empty
+        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, and a Value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 24 : SN wrong format / Value wrong format
+        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, and the Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 25 : SN is empty / Name > 256
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName.getText().length() > 256)) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be entered, and the name must not exceed 256 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 26 : SN wrong format / Name > 256
+        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldName.getText().length() > 256)) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Serial Number must be in A-XXX-XXX-XXX format, and the name must not exceed 256 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 27 : SN is empty / Name < 2
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
+                (descriptionTextFieldName.getText().length() < 2)) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Serial Number must be entered, and the name must exceed 2 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 28 : SN wrong format / Name < 2
+        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
+                (descriptionTextFieldName.getText().length() < 2)) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, and the name must exceed 2 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 29 : SN is empty
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty())) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Serial Number must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 30 : Name is empty
+        if (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Item Name must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 31 : Value is empty
+        if (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty()) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A value must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 32 : SN wrong format
+        if (!descriptionTextFieldSN.getText().matches(SNFormat)) {
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 33 : Name > 256
+        if (descriptionTextFieldName.getText().length() > 256) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Name value must not be greater than 256 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 34 : Name < 2
+        if (descriptionTextFieldName.getText().length() < 2) {
+
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Name value must not be less than 2 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // Case 35 : Value wrong format
+        if ((!descriptionTextFieldValue.getText().matches(valueFormat))) {
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Value must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateDuplicateForAdd(String validateTitle) {
+
+        //Create a new Alert object of type WARNING.
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        // Loop through the Master list using a LocalEvent variable {
+        for (LocalEvent event : listMaster) {
+
+            if (event.getSerialNumber().equals(descriptionTextFieldSN.getText())) {
 
                 // then show the alert message and return false.
+                alert.setTitle(validateTitle);
+                alert.setHeaderText(null);
+                alert.setContentText("A Serial Number with given values already exists. Please give \"Unique\" entries only.");
+                alert.showAndWait();
 
-                }
-
-            // Else return true.
+                return false;
+            }
         }
+        return true;
+    }
 
-        public void addEntry() {
+    public void addEntry() {
+
         // Check if the entry to be added is valid.
+        if (validateFields(validateTitle) && validateDuplicateForAdd(validateTitle)) {
 
             // Set a String variable to the TextField value.
+            String value = descriptionTextFieldValue.getText();
 
             // Check if the string has a '$' in it. {
+            if (!value.contains("$")) {
 
                 // Assign a String variable to be used for concatenating a '$'
+                String valueWith$sign;
+                valueWith$sign = "$" + value;
 
                 // Create a new LocalEvent object with given TextField Values.
+                LocalEvent localEvent = new LocalEvent(descriptionTextFieldSN.getText(), descriptionTextFieldName.getText(),
+                        valueWith$sign);
 
                 // Add the LocalEvent object w/ concatenated string to the master list.
-                }
+                listMaster.add(localEvent);
+            }
 
-            // else do the same as before only using original string that already had a '$'.
+            // do the same as before only using original string that already had a '$'.
+            else {
+                LocalEvent localEvent = new LocalEvent(descriptionTextFieldSN.getText(), descriptionTextFieldName.getText(), value);
+                listMaster.add(localEvent);
+            }
 
-         // Set the table to the master list.
-
-         // Refresh the Description TextFields.
-
+            // Set the table to the master list.
+            table.setItems(listMaster);
+            // Refresh the Description TextFields.
+            refreshDescriptionFields();
         }
+    }
 
 
-        public void deleteEntry() {
+    public void deleteEntry() {
 
         // Check if an entry is indeed being selected.
+        if (validateSelected(validateTitle)) {
 
             // Get the index of the table selection.
+            int selectedID = table.getSelectionModel().getSelectedIndex();
 
             // Get all the items from the tables' selected index and remove them.
+            table.getItems().remove(selectedID);
 
             // Refresh the table.
+            table.refresh();
 
             // Set a boolean variable tracking changes being made to true.
+            unsavedChanges = true;
         }
+    }
 
-        public void deleteAllEntries() {
+    public void deleteAllEntries() {
 
         // Check if the table isn't empty.
-
+        if (!table.getItems().isEmpty()) {
             // if not empty then Clear the table.
-
+            table.getItems().clear();
             // Clear the master list.
-
+            listMaster.clear();
             // Set a boolean variable tracking changes being made to true.
-
+            unsavedChanges = true;
         }
-
-        @FXML
-        private void sortEntriesBySerialNumber() {
-
-        // Check if the master list isn't empty{
-
-            // if not empty then Create a Comparator variable of type LocalEvent
-            // and set it to the comparison of all the "Serial Numbers".
-
-            // Sort the master list based off the comparator variable.
-
-            // Set the table to the master list.
-            // Set a boolean variable tracking changes being made to true.
-            }
-        }
-
-        @FXML
-        private void sortEntriesByName() {
-
-        // Check if the master list isn't empty{
-
-            // if not empty then Create a Comparator variable of type LocalEvent
-            // and set it to the comparison of all the "Names".
-
-            // Sort the master list based off the comparator variable.
-
-            // Set the table to the master list.
-            // Set a boolean variable tracking changes being made to true.
-            }
-        }
-
-        @FXML
-        private void sortEntriesByLeastValue() {
-
-        // Check if the master list isn't empty{
-
-            // if not empty then Create a Comparator variable of type LocalEvent
-            // and set it to the comparison of all the "Values".
-
-            // Sort the master list based off the comparator variable.
-
-            // Set the table to the master list.
-            // Set a boolean variable tracking changes being made to true.
-            }
-        }
-
-        public void menuSavePicked() {
-
-        // Create a Window variable and set it to the file menu variables getScene method return.
-
-        // Set the title/ initial file name and extension filters for the file chooser.
-
-        // try to acquire the file path to be saved from the file chooser.
-
-        // If the path isn't null set the initial directory as the parent file.
-
-            // Set a String variable as the files absolute path.
-
-            // Check if the string ends in a 't'.  {
-
-                   // Set a boolean variable tracking changes being made to false.
-                   // Call the saveTSVFile method with the String variable as a parameter.
-                }
-            // Check if the string ends in a 'l'.  {
-
-                    // Set a boolean variable tracking changes being made to false.
-                    // Call the saveHTMLFile method with the String variable as a parameter.
-                }
-            // Check if the string ends in a 'n'.  {
-
-                    // Set a boolean variable tracking changes being made to false.
-                    // Call the saveJSONFile method with the String variable as a parameter.
-                }
-            }
-         // Catch any exceptions and print the stack trace.
-        }
-
-        private void saveTSVFile(File file) throws IOException {
-
-            // Set a boolean variable tracking changes being made to false.
-
-            // Create new PrintWriter object and pass it the File path.
-
-            // Loop through the Master list using a LocalEvent variable {
-
-            // Print write the event variable's get serial number method return.
-
-            // Print write a tab.
-
-            // Print write the event variable's get name method return.
-
-            // Print write a tab.
-
-            // Print write the event variable's get value method return.
-
-            // Print write a new line.
-
-            }
-        // flush and close the PrintWriter.
-    }
-
-    private void saveHTMLFIle(File file) throws IOException {
-
-        // Set a boolean variable tracking changes being made to false.
-
-        // Create new PrintWriter object and pass it the File path.
-
-        // Print write the doctype tag.
-        // Print write the html tag.
-        // Print write the style tag.
-        // Print write style info.
-        // Print write style tag close.
-        // print write body tag close.
-        // print write the table size.
-        // print write the table row tag.
-        // print write the table headers for SN, Name, and Value.
-        // Print write the table row tag close.
-
-        // Loop through the Master list using a LocalEvent variable {
-
-            // Print write the table row tag.
-            // Print write the table data cell tag with event return elements followed by the td close tag.
-        }
-        // Print write the table tag close , then body tag close, then html tag close.
-
-        // flush and close the PrintWriter.
-    }
-
-    private void saveJSONFIle(File file) throws IOException {
-
-        // Create an integer counter variable.
-        // Set a boolean variable tracking changes being made to false.
-        // Create new PrintWriter object and pass it the File path.
-
-        // Print write the JSON object opening.
-        // Print write the Json array opening.
-
-
-        // Loop through the Master list using a LocalEvent variable {
-
-            // increment the counter.
-            // Print write the json elements. If at the end print the last value without the following ','
-
-        }
-        // Print write the Json array closing.
-        // Print write the JSON object closing.
-
-        // flush and close the PrintWriter.
-    }
-
-    public void menuLoadPicked() throws IOException {
-
-        // Create a Window variable and set it to the file menu variables getScene method return.
-
-        // Set the title and try to acquire the file path to be opened from the file chooser.
-
-        // If the path isn't null set the initial directory as the parent file.
-
-            // Set a String variable as the files absolute path.
-
-            // Check if the string ends in a 't'.  {
-
-               // call openTSVFile method with a File path passed in as a parameter.
-            }
-
-            // Check if the string ends in a 'n'.  {
-
-                // Set a JsonObject to the return of the readJSONFile method.
-                // Set a JsonArray variable to the return of the getJsonArray method.
-                // call openJSONFile method with a File path passed in as a parameter.
-            }
-
-            // Check if the string ends in a 'l'.  {
-
-                // call openHTMLFile method with a File path passed in as a parameter.
-            }
-
-    }
-
-    public void openHTMLFile (File file) {
-        // create JSOUPS Document object.
-
-
-        // try to set the document object to the return JSOUPS parse method of the HTML file.
-
-        // catch an IOException and print the stack trace.
-
-        // assert the document isn't null.
-        //select the first table.
-
-
-        //first row is the col names so skip it. Loop through the rows. {
-
-            // Get the element from each row
-            // Set three String variables to HTML elements.
-
-            // Pass the String variables to a LocalEvent object.
-
-            // Add the LocalEvent object to the master list.
-
-        }
-        // Set the table to the master list.
-    }
-
-    public void openTSVFile(File file) throws IOException {
-
-        // Create a new BufferedReader object with a File reader as a parameter.
-        // Clear the master list.
-        // Create a string variable as the read line.
-        // Continue looping until the read line is null. {
-
-            // Split the strings by the \t and store them in a string array.
-
-            // Trim each string and pass them to a LocalEvent object.
-
-            // Add the LocalEvent object to the master list.
-        }
-        // Set the table to the master list.
-    }
-
-    public JsonObject readJSONFile(File file) throws FileNotFoundException {
-
-        // Read json file using parser and store it in obj.
-
-
-        // Create json object to read internal values.
-    }
-
-    public JsonArray getJsonArray(JsonObject jsonObject) {
-
-        // Reading products array from the file.
-    }
-
-    public void openJSONFile(JsonArray items) {
-        // Loop through the JsonArray using a JsonElement variable. {
-
-            // if the element is null break from the loop.
-
-            // get the string value of the JSON object
-            // Assign them to three different String variables.
-
-
-            // Pass the String variables to a LocalEvent object.
-
-            // Add the LocalEvent object to the master list.
-
-        }
-        // Set the table to the master list.
-    }
-
-    private boolean validateNameSearchFields(String validateTitle) {
-
-        //Create a new Alert object of type WARNING.
-
-        // if the Name Description Text field is null/empty.{
-
-            // Show alert and return false;
-            }
-
-
-
-        // if the Name Description Text field is > 256 characters. {
-
-            // Show alert and return false;
-            }
-
-
-        // if the Name Description Text field is < 2 characters. {
-
-            // Show alert and return false;
-            }
-
-        else return true.
-    }
-
-    private boolean validateSerialNumberSearchFields(String validateTitle) {
-
-        //Create a new Alert object of type WARNING.
-
-        // if the Serial Number Description Text field is null/empty.{
-
-            // Show alert and return false;
-            }
-
-        // if the Serial Number Description Text field format is invalid.{
-
-            // Show alert and return false;
-            }
-
-      else  return true;
     }
 
     @FXML
-    private void searchSerialNumberOfEntries() {
+    private void sortEntriesBySerialNumber() {
 
-        // check if the serial number format is valid from the description text box. {
+        // Check if the master list isn't empty{
+        if (!listMaster.isEmpty()) {
+
+            // if not empty then Create a Comparator variable of type LocalEvent
+            // and set it to the comparison of all the "Serial Numbers".
+            Comparator<LocalEvent> comparator = Comparator.comparing(LocalEvent::getSerialNumber);
+
+            // Sort the master list based off the comparator variable.
+            listMaster.sort(comparator);
+
+            // Set the table to the master list.
+            table.setItems(listMaster);
+
+            // Set a boolean variable tracking changes being made to true.
+            unsavedChanges = true;
+        }
+    }
+
+    @FXML
+    private void sortEntriesByName() {
+
+        // Check if the master list isn't empty{
+        if (!listMaster.isEmpty()) {
+
+            // if not empty then Create a Comparator variable of type LocalEvent
+            // and set it to the comparison of all the "Names".
+            Comparator<LocalEvent> comparator = Comparator.comparing(LocalEvent::getName);
+
+            // Sort the master list based off the comparator variable.
+            listMaster.sort(comparator);
+
+            // Set the table to the master list.
+            table.setItems(listMaster);
+
+            // Set a boolean variable tracking changes being made to true.
+            unsavedChanges = true;
+        }
+    }
+
+    @FXML
+    private void sortEntriesByLeastValue(){
+
+        // Check if the master list isn't empty{
+        if (!listMaster.isEmpty()) {
+
+            // if not empty then Create a Comparator variable of type LocalEvent
+            // and set it to the comparison of all the "Values".
+            Comparator<LocalEvent> comparator = Comparator.comparing(LocalEvent::getValue);
+
+            // Sort the master list based off the comparator variable.
+            listMaster.sort(comparator);
+
+            // Set the table to the master list.
+            table.setItems(listMaster);
+
+            // Set a boolean variable tracking changes being made to true.
+            unsavedChanges = true;
+        }
+    }
+
+    public void menuSavePicked() {
+
+        // Create a Window variable and set it to the file menu variables getScene method return.
+        Window stage = fileMenuButton.getScene().getWindow();
+
+        // Set the title/ initial file name and extension filters for the file chooser.
+        fileChooser.setTitle("Save Dialog");
+        fileChooser.setInitialFileName("InventoryManagement");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TSV", "*.txt"), new FileChooser.ExtensionFilter("HTML", "*.html"),
+                new FileChooser.ExtensionFilter("JSON", "*.json"));
+
+        // try to acquire the file path to be saved from the file chooser.
+        try {
+            File file = fileChooser.showSaveDialog(stage);
+
+            // If the path isn't null set the initial directory as the parent file.
+            if (file != null) {
+
+                fileChooser.setInitialDirectory(file.getParentFile());
+
+                // Set a String variable as the files absolute path.
+                String fileLoc = file.getAbsolutePath();
+
+                // Check if the string ends in a 't'.
+                if (fileLoc.endsWith("t")) {
+
+                    // Set a boolean variable tracking changes being made to false.
+                    unsavedChanges = false;
+
+                    // Call the saveTSVFile method with the String variable as a parameter.
+                    saveTSVFile(file);
+                }
+
+                // Check if the string ends in a 'l'.
+                if (fileLoc.endsWith("l")) {
+
+                    // Set a boolean variable tracking changes being made to false.
+                    unsavedChanges = false;
+
+                    // Call the saveHTMLFile method with the String variable as a parameter.
+                    saveHTMLFIle(file);
+                }
+
+                // Check if the string ends in a 'n'.
+                if (fileLoc.endsWith("n")) {
+
+                    // Set a boolean variable tracking changes being made to false.
+                    unsavedChanges = false;
+
+                    // Call the saveJSONFile method with the String variable as a parameter.
+                    saveJSONFIle(file);
+                }
+            }// Catch any exceptions and print the stack trace.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveTSVFile(File file)throws IOException {
+
+        // Set a boolean variable tracking changes being made to false.
+        unsavedChanges = false;
+
+        // Create new PrintWriter object and pass it the File path.
+        PrintWriter pw = new PrintWriter(file);
+
+        // Loop through the Master list using a LocalEvent variable
+        for (LocalEvent event : listMaster) {
+
+            // Print write the event variable's get serial number method return.
+            pw.write(event.getSerialNumber());
+
+            // Print write a tab.
+            pw.write("\t");
+
+            // Print write the event variable's get name method return.
+            pw.write(event.getName());
+
+            // Print write a tab.
+            pw.write("\t");
+
+            // Print write the event variable's get value method return.
+            pw.write(event.getValue());
+
+            // Print write a new line.
+            pw.println();
+        }
+        // flush and close the PrintWriter.
+        pw.flush();
+        pw.close();
+    }
+
+    private void saveHTMLFIle(File file)throws IOException{
+
+        // Set a boolean variable tracking changes being made to false.
+        unsavedChanges = false;
+
+        // Create new PrintWriter object and pass it the File path.
+        PrintWriter pw = new PrintWriter(file);
+
+        // Print write the doctype tag.
+        pw.write("<!DOCTYPE html>");
+
+        // Print write the html tag.
+        pw.write("<html>");
+
+        // Print write the style tag.
+        pw.write("<style>");
+
+        // Print write style info.
+        pw.write("table, th, td {");
+        pw.write("  border:1px solid black; }");
+        // Print write style tag close.
+        pw.write("</style>");
+
+        // print write body tag close.
+        pw.write("<body>\n");
+
+        // print write the table size.
+        pw.write("<table style=\"width:100%\">");
+
+        // print write the table row tag.
+        pw.write("  <tr>");
+
+        // print write the table headers for SN, Name, and Value.
+        pw.write("    <th>Serial Number</th>");
+        pw.write("    <th>Item Name</th>");
+        pw.write("    <th>Item Value</th>");
+
+        // Print write the table row tag close.
+        pw.write("  </tr>");
+
+        // Loop through the Master list using a LocalEvent variable {
+        for (LocalEvent event : listMaster) {
+
+            // Print write the table row tag.
+            pw.write("  <tr>");
+
+            // Print write the table data cell tag with event return elements followed by the td close tag.
+            pw.write("<td>" + event.getSerialNumber() + "<t/d>");
+            pw.write("<td>" + event.getName() + "<t/d>");
+            pw.write("<td>" + event.getValue() + "<t/d>");
+        }
+        // Print write the table tag close , then body tag close, then html tag close.
+        pw.write("</table>\n");
+        pw.write("</body>");
+        pw.write("</html>");
+        // flush and close the PrintWriter.
+        pw.flush();
+        pw.close();
+    }
+
+    private void saveJSONFIle(File file)throws IOException{
+
+        // Create an integer counter variable.
+        int loopCounter = 0;
+
+        // Set a boolean variable tracking changes being made to false.
+        unsavedChanges = false;
+
+        // Create new PrintWriter object and pass it the File path.
+        PrintWriter pw = new PrintWriter(file);
+
+        // Print write the JSON object opening.
+        pw.write("{\n");
+
+        // Print write the Json array opening.
+        pw.write(" \"Items\" : [\n");
+
+        // Loop through the Master list using a LocalEvent variable {
+        for (LocalEvent event : listMaster) {
+
+            // increment the counter.
+            loopCounter++;
+
+            // Print write the json elements. If at the end print the last value without the following ','
+            pw.write("{\"Serial Number\": \"" + event.getSerialNumber() + "\",");
+            pw.write("\"Name\": \"" + event.getName() + "\", ");
+
+            if (loopCounter == listMaster.size())
+                pw.write("\"Value\": \"" + event.getValue() + "\" }\n");
+            else
+                pw.write("\"Value\": \"" + event.getValue() + "\" },\n");
+        }
+        // Print write the Json array closing.
+        pw.write("  ]\n");
+
+        // Print write the JSON object closing.
+        pw.write("}");
+
+        // flush and close the PrintWriter.
+        pw.flush();
+        pw.close();
+    }
+
+    public void menuLoadPicked()throws IOException{
+
+        // Create a Window variable and set it to the file menu variables getScene method return.
+        Window stage = fileMenuButton.getScene().getWindow();
+
+        // Set the title and try to acquire the file path to be opened from the file chooser.
+        fileChooser.setTitle("Load Dialog");
+        File file = fileChooser.showOpenDialog(stage);
+
+        // If the path isn't null set the initial directory as the parent file.
+        if (file != null) {
+            fileChooser.setInitialDirectory(file.getParentFile());
+
+            // Set a String variable as the files absolute path.
+            String fileLoc = file.getAbsolutePath();
+
+            // Check if the string ends in a 't'.
+            if (fileLoc.endsWith("t")) {
+
+                // call openTSVFile method with a File path passed in as a parameter.
+                openTSVFile(file);
+            }
+
+            // Check if the string ends in a 'n'.
+            if (fileLoc.endsWith("n")) {
+
+                // Set a JsonObject to the return of the readJSONFile method.
+                JsonObject jsonObject = readJSONFile(file);
+
+                // Set a JsonArray variable to the return of the getJsonArray method.
+                JsonArray items = getJsonArray(jsonObject);
+
+                // call openJSONFile method with a File path passed in as a parameter.
+                openJSONFile(items);
+            }
+
+
+            // Check if the string ends in a 'l'.
+            if (fileLoc.endsWith("l")) {
+
+                // call openHTMLFile method with a File path passed in as a parameter.
+                openHTMLFile(file);
+            }
+        }
+    }
+
+    public void openHTMLFile(File file){
+        // create JSOUPS Document object.
+        org.jsoup.nodes.Document document = null;
+
+        // try to set the document object to the return JSOUPS parse method of the HTML file.
+        try {
+            document = Jsoup.parse(file, "UTF-8");
+
+        // catch an IOException and print the stack trace.
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // assert the document isn't null.
+        assert document != null;
+
+        //select the first table.
+        Element Table = document.select("table").get(0);
+        Elements rows = Table.select("tr");
+
+        //first row is the col names so skip it. Loop through the rows.
+        for (int i = 1; i < rows.size(); i++) {
+
+            // Get the element from each row
+            Element row = rows.get(i);
+            Elements cols = row.select("td");
+
+            // Set three String variables to HTML elements.
+            String SN = cols.get(0).text();
+            String name = cols.get(1).text();
+            String value = cols.get(2).text();
+
+            // Pass the String variables to a LocalEvent object.
+            LocalEvent localEvent = new LocalEvent(SN, name, value);
+
+            // Add the LocalEvent object to the master list.
+            listMaster.add(localEvent);
+        }
+        // Set the table to the master list.
+        table.setItems(listMaster);
+    }
+
+    public void openTSVFile(File file)throws IOException{
+
+        // Create a new BufferedReader object with a File reader as a parameter.
+        BufferedReader TSVReader = new BufferedReader(new FileReader(file));
+
+        // Clear the master list.
+        listMaster.clear();
+
+        // Create a string variable as the read line.
+        String line;
+
+        // Continue looping until the read line is null.
+        while ((line = TSVReader.readLine()) != null) {
+
+            // Split the strings by the \t and store them in a string array.
+            String[] lineItems = line.split("\t");
+
+            // Trim each string and pass them to a LocalEvent object.
+            String serialNumber = lineItems[0].trim();
+            String name = lineItems[1].trim();
+            String value = lineItems[2].trim();
+
+            LocalEvent localEvent = new LocalEvent(serialNumber, name, value);
+
+            // Add the LocalEvent object to the master list.
+            listMaster.add(localEvent);
+        }
+        // Set the table to the master list.
+        table.setItems(listMaster);
+    }
+
+    public JsonObject readJSONFile(File file)throws FileNotFoundException{
+
+        // Read json file using parser and store it in obj.
+        Object obj = JsonParser.parseReader(new FileReader(file));
+
+        // Create json object to read internal values.
+        return (JsonObject) obj;
+    }
+
+    public JsonArray getJsonArray(JsonObject jsonObject){
+
+        // Reading products array from the file.
+        return (JsonArray) jsonObject.get("Items");
+    }
+
+    public void openJSONFile(JsonArray items){
+
+        // Loop through the JsonArray using a JsonElement variable. {
+        for (JsonElement item : items) {
+
+            // if the element is null break from the loop.
+            if (item.isJsonNull())
+                break;
+
+            // get the string value of the JSON object
+            // Assign them to three different String variables.
+            String SN = item.getAsJsonObject().get("Serial Number").getAsString();
+            String NAME = item.getAsJsonObject().get("Name").getAsString();
+            String VALUE = item.getAsJsonObject().get("Value").getAsString();
+
+            // Pass the String variables to a LocalEvent object.
+            LocalEvent localEvent = new LocalEvent(SN, NAME, VALUE);
+
+            // Add the LocalEvent object to the master list.
+            listMaster.add(localEvent);
+        }
+
+        // Set the table to the master list.
+        table.setItems(listMaster);
+    }
+
+    private boolean validateNameSearchFields(String validateTitle){
+
+        //Create a new Alert object of type WARNING.
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        // if the Name Description Text field is null/empty.
+        if (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) {
+
+            // Show alert and return false;
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Name must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+
+        // if the Name Description Text field is > 256 characters.
+        if (descriptionTextFieldName.getText().length() > 256) {
+
+            // Show alert and return false;
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Name must not exceed 256 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+
+        // if the Name Description Text field is < 2 characters.
+        if (descriptionTextFieldName.getText().length() < 2) {
+
+            // Show alert and return false;
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Name must exceed 2 characters.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validateSerialNumberSearchFields(String validateTitle){
+
+        //Create a new Alert object of type WARNING.
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+
+        // if the Serial Number Description Text field is null/empty.
+        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty())) {
+
+            // Show alert and return false;
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("A Serial Number must be entered.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        // if the Serial Number Description Text field format is invalid.
+        if (!descriptionTextFieldSN.getText().matches(SNFormat)) {
+
+            // Show alert and return false;
+            alert.setTitle(validateTitle);
+            alert.setHeaderText(null);
+            alert.setContentText("Serial Number must be positive and in #.## format.");
+            alert.showAndWait();
+
+            return false;
+        }
+
+        return true;
+    }
+
+    @FXML
+    private void searchSerialNumberOfEntries(){
+
+        // check if the serial number format is valid from the description text box.
+        if (validateSerialNumberSearchFields(validateTitle)) {
 
             // Set a string variable to the description text box value.
+            String snSearchField = descriptionTextFieldSN.getText().trim();
+
             // set a boolean skip variable used for testing purposes to true.
+            boolean skipRow = true;
 
             // Loop through the Master list using a LocalEvent variable {
+            for (LocalEvent event : listMaster) {
 
                 // check if boolean is true and continue.
+                if (skipRow) {
+                    skipRow = false;
+                    continue;
+                }
 
-                // check if the string variable matches a result from the list. {
+                // check if the string variable matches a result from the list.
+                if (event.getSerialNumber().equalsIgnoreCase(snSearchField)) {
 
                     // If found clear a filtered list.
+                    listFiltered.clear();
+
                     // Set the table to the freshly cleared list.
+                    table.setItems(listFiltered);
+
                     // add the LocalEvent matched keyword to the filtered list
+                    listFiltered.add(event);
+
                     // set the table to the filtered list
+                    table.setItems(listFiltered);
+
                     // finally break from the loop.
+                    break;
                 }
             }
         }
@@ -533,82 +1203,136 @@ public class Controller {
     @FXML
     private void searchNameOfEntries() {
 
-        // check if the name format is valid from the description text box. {
+        // check if the name format is valid from the description text box.
+        if (validateNameSearchFields(validateTitle)) {
 
             // Set a string variable to the description text box value.
+            String nameSearchField = descriptionTextFieldName.getText().trim();
+
             // set a boolean skip variable used for testing purposes to true.
+            boolean skipRow = true;
+
             // clear a filtered list.
+            listFiltered.clear();
 
             // Loop through the Master list using a LocalEvent variable {
+            for (LocalEvent event : listMaster) {
 
                 // check if boolean is true and continue.
+                if (skipRow) {
+                    skipRow = false;
+                    continue;
+                }
 
                 // If found add the LocalEvent matched keyword to the filtered list
+                if (event.getName().equalsIgnoreCase(nameSearchField)) {
 
+                    listFiltered.add(event);
+                }
             }
             // set the table to the filtered list
+            table.setItems(listFiltered);
         }
     }
 
-    public void refreshDescriptionFields() {
+    public boolean validateDuplicateForEdit(String key){
 
-        // clear out all the text fields.
-    }
+        // Loop through the Master list using a LocalEvent variable
+        for (LocalEvent event : listMaster) {
 
-    public boolean validateDuplicateForEdit(String key) {
-
-        // Loop through the Master list using a LocalEvent variable {
-
-            // if any local event variables in the list match the key {
+            // if any local event variables in the list match the key
+            if (event.getSerialNumber().equals(key)) {
 
                 // Create a new Alert object of type WARNING.
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+
                 // Show alert and return false;
+                alert.setTitle("Validate Duplicate Serial Numbers");
+                alert.setHeaderText(null);
+                alert.setContentText("A Serial Number with given values already exists. Please give \"Unique\" entries only.");
+                alert.showAndWait();
+                return false;
             }
         }
-        else return true;
+        return true;
     }
 
+    String backup ="";
     @FXML
-    private void editEvent() {
+    private void editEvent(){
 
         // First check if there is a valid selection {
+        if(validateSelected(validateTitle)) {
 
             // Get the index of the current table selection.
+            int index = listMaster.indexOf(table.getSelectionModel().getSelectedItem());
 
-            // If in edit mode {
+            if (editModeToggle) {
 
                 // Set three String variables to the trimmed values of the text fields.
+                String serialNumber = descriptionTextFieldSN.getText().trim();
+                String name = descriptionTextFieldName.getText().trim();
+                String value = descriptionTextFieldValue.getText().trim();
 
-                // If there isn't an edit being made true.
+                // If there isn't an edit dupCheck is made true.
+                boolean doDupCheck = !serialNumber.equals(backup);
 
-                // If the text fields are valid and dupcheck passes {
+                // If the text fields are valid and dupcheck passes
+                if (validateFields(validateTitle) && (!doDupCheck||validateDuplicateForEdit(serialNumber))) {
 
                     // Get the event strings and set them in their respective text fields.
+                    descriptionTextFieldSN.setText(serialNumber);
+                    descriptionTextFieldName.setText(name);
+                    descriptionTextFieldValue.setText(value);
 
                     // Set a LocalEvent edit with the given serial number and name values.
                     localEventEdit.setSerialNumber(serialNumber);
                     localEventEdit.setName(name);
+
                     // Check for the '$' character append on if necessary then do the same with value.
+                    if (!value.contains("$")){
+                        String valueWith$ = "$"+value;
+                        localEventEdit.setValue(valueWith$);
+                    }
+                    else {
+                        localEventEdit.setValue(value);
+                    }
 
                     // Set the boolean edit togle to false.
+                    editModeToggle = false;
+
                     // Set the edit button to say edit.
-                    // wipe the textfields
+                    editButton.setText("Edit");
+
+                    // Wipe the TextFields
+                    refreshDescriptionFields();
+
                     // Set a boolean variable tracking changes being made to true.
+                    unsavedChanges = true;
                 }
             }
-            else {
-               // set the LocalEvent variable to list masters selected index.
+            else{
+                // set the LocalEvent variable to list masters selected index.
+                localEventEdit = listMaster.get(index);
 
                 // Set a backup string to the serial number.
+                backup = localEventEdit.getSerialNumber();
 
                 // Set the description Text fields again.
+                descriptionTextFieldSN.setText(String.valueOf(localEventEdit.getSerialNumber()));
+                descriptionTextFieldName.setText(String.valueOf(localEventEdit.getName()));
+                descriptionTextFieldValue.setText(String.valueOf(localEventEdit.getValue()));
 
                 // Change edit boolean to true
-                // set button text to save
+                editModeToggle = true;
+
+                // Set button text to save
+                editButton.setText("Save");
             }
-           // Set table to the master list.
-           // Refresh the table.
+            // Set table to the master list.
+            table.setItems(listMaster);
+            // Refresh the table.
+            table.refresh();
         }
     }
-     */
 }
