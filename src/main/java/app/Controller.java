@@ -40,8 +40,7 @@ public class Controller implements Initializable {
 
     private LocalEvent localEventEdit;
 
-    // Class Controller will begin with all the javaFX control declarations.
-
+    //javaFX control declarations.
     @FXML
     private TableView<LocalEvent> table;
     @FXML
@@ -50,6 +49,9 @@ public class Controller implements Initializable {
     private TableColumn<LocalEvent, String> name;
     @FXML
     private TableColumn<LocalEvent, String> value;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     Button addButton;
@@ -70,9 +72,6 @@ public class Controller implements Initializable {
     private MenuButton fileMenuButton;
 
     @FXML
-    MenuButton optionsMenuButton;
-
-    @FXML
     private TextField descriptionTextFieldSN;
 
     @FXML
@@ -80,9 +79,6 @@ public class Controller implements Initializable {
 
     @FXML
     private TextField descriptionTextFieldValue;
-
-    @FXML
-    AnchorPane anchorPane;
 
     private final FileChooser fileChooser = new FileChooser();
 
@@ -138,7 +134,6 @@ public class Controller implements Initializable {
         }
         return true;
     }
-
 
     private boolean validateFields(String validateTitle) {
 
@@ -1258,10 +1253,10 @@ public class Controller implements Initializable {
         }
         return true;
     }
-
+    // String variable used for determining a non edit.
     String backup ="";
     @FXML
-    private void editEvent(){
+    private void editEntry(){
 
         // First check if there is a valid selection {
         if(validateSelected(validateTitle)) {

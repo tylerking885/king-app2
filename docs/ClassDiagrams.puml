@@ -1,0 +1,96 @@
+@startuml
+class InventoryManagementApplication extends Application{
+
+    ' Public start method & Main method:
+    + start(stage: Stage);
+    + main();
+}
+
+class Controller implements Initialize{
+
+    ' Class instance variables:
+    boolean: editModeToggle;
+    boolean: unsavedChanges;
+    ObservableList<LocalEvent>: listMaster;
+    ObservableList<LocalEvent>: listFiltered;
+    Button: addButton;
+    Button: deleteButton;
+
+    ' Private variables:
+    - boolean: unsavedChanges;
+    - boolean: editModeToggle;
+    - double: xOffset;
+    - double: yOffset;
+    - LocalEvent: localEventEdit;
+    - Button editButton;
+    - Button buttonMin;
+    - Button buttonClose;
+    - MenuButton fileMenuButton;
+    - AnchorPane: anchorPane;
+    - TextField descriptionTextFieldSN;
+    - TextField descriptionTextFieldName;
+    - TextField descriptionTextFieldValue;
+    - TableView<LocalEvent> table;
+    - TableColumn<LocalEvent, String> serialNumber;
+    - TableColumn<LocalEvent, String> name;
+    - TableColumn<LocalEvent, String> value;
+
+    ' Private methods:
+    - saveTSVFile(file: File);
+    - saveHTMLFile(file: File);
+    - saveJSONFile(file: File);
+    - validateSelected(validateTitle: String): boolean;
+    - validateFields(validateTitle: String): boolean;
+    - validateNameSearchFields(validateTitle: String): boolean;
+    - validateSerialNumberSearchFields(validateTitle: String): boolean;
+    - deleteEntry();
+    - deleteAllEntries();
+    - editEvent();
+    - addEntry();
+    - sortEntriesByLeastValue();
+    - sortEntriesBySerialNumber();
+    - sortEntriesByName();
+    - searchSerialNumberOfEntries();
+    - searchNameOfEntries();
+
+    ' Public methods:
+    + initialize(arg0: URL, arg1: ResourceBundle);
+    + refreshFields();
+    + saveFile(file: File);
+    + menuLoadClicked();
+    + menuSaveClicked();
+    + readJsonFile(file: File): JsonObject;
+    + getJsonArray(jsonObject: JsonObject): JsonArray;
+    + openTSVFile(file: File);
+    + openJSONFile(items: JsonArray);
+    + openHTMLFile()file: File);
+    + handleCloseAction();
+    + handleMinAction();
+    + displayModalPopup(): boolean;
+    + validateDuplicateForEdit(key: String): boolean;
+
+    ' Protected methods:
+    # handleClickAction(event: MouseEvent);
+    # handleMovementAction(event: MouseEvent);
+}
+
+class LocalEvent{
+
+    ' Private methods:
+    - serialNumber: String;
+    - itemName: String;
+    - itemValue: String;
+
+    ' Constructor:
+    + LocalEvent(serialNumber: String, itName: String, itemValue: String);
+
+    ' Public methods:
+    + getSerialNumber(): String serialNumber;
+    + setSerialNumber(serialNumber: String);
+    + getItemName(): String itemName;
+    + setItemName(itemName: String);
+    + getItemValue(): String itemValue;
+    + setItemValue(itemValue: String);
+    + toString(): String;
+}
+@enduml

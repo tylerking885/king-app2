@@ -45,7 +45,7 @@
                     <Font size="13.0" />
                 </font>
             </Button>
-            <Button fx:id="editButton" alignment="CENTER" layoutX="927.0" layoutY="5.0" mnemonicParsing="false" onAction="#editEvent" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Edit" textFill="WHITE">
+            <Button fx:id="editButton" alignment="CENTER" layoutX="927.0" layoutY="5.0" mnemonicParsing="false" onAction="#editEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Edit" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>

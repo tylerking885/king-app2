@@ -4,9 +4,8 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class LocalEvent {
 
-       // Class LocalEvent will contain three private SimpleStringProperty variables.
-        //SerialNumber, Name, and Value.
-
+    // Class LocalEvent will contain three private SimpleStringProperty variables
+    // SerialNumber, Name, and Value.
     private SimpleStringProperty serialNumber;
     private SimpleStringProperty name;
     private SimpleStringProperty value;

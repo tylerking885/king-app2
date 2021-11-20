@@ -85,13 +85,8 @@
 }
 
 .text-field:focused{
-    -fx-border-color: #005797;
+    -fx-border-color: blue;
     -fx-border-insets: 0, 2, 2, 2;
     -fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;
 }
 
-.text-input:occupied {
-    -fx-border-color: #005797;
-        -fx-border-insets: 0, 2, 2, 2;
-        -fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;
-}
