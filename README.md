@@ -156,7 +156,7 @@ In order to use Search (Name) button 2 pre-Conditions must be met.
 >
 > The searched item will now be the only thing displayed.
 >
-> ![Project Image](src/main/resources/readmeImages/After-Search(SN)-Pressed.png)
+> ![Project Image](src/main/resources/readmeImages/After-Search(Name)-Pressed.png)
 
 
 [Back To The Top](#table-of-contents)
