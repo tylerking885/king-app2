@@ -109,6 +109,13 @@ In order to use the Edit button 2 pre-Conditions must be met.
 > ![Project Image](src/main/resources/readmeImages/After-Edit-Pressed.png)
 >
 > The user must then click Save to apply their new edit.
+> 
+> ![Project Image](src/main/resources/readmeImages/Edit-toBechanged.png)
+> 
+> After edit process goes through correctly:
+> 
+> ![Project Image](src/main/resources/readmeImages/Edit-toBechanged-FINAL.png)
+
 
 [Back To The Top](#table-of-contents)
 
