@@ -14,7 +14,7 @@
 
 <SplitPane dividerPositions="0.5" maxWidth="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="293.0" prefWidth="1149.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.Controller">
     <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#handleClickAnchorPaneAction" onMouseDragged="#handleMovementAction" prefHeight="85.0" prefWidth="1149.0" style="-fx-background-color: black;">
-      <MenuButton fx:id="fileMenuButton" alignment="TOP_LEFT" layoutX="6.0" layoutY="7.0" mnemonicParsing="false" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="File" textFill="WHITE">
+      <MenuButton fx:id="fileMenuButton" alignment="TOP_LEFT" layoutX="16.0" layoutY="4.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="File" textFill="WHITE">
         <items>
             <MenuItem mnemonicParsing="false" onAction="#menuLoadPicked" text="Load" />
           <MenuItem mnemonicParsing="false" onAction="#menuSavePicked" text="Save" />
@@ -23,20 +23,20 @@
             <Font size="13.0" />
          </font>
       </MenuButton>
-      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1063.0" layoutY="-6.0" mnemonicParsing="false" onAction="#handleMinAction" onMouseEntered="#hoverOnMinBt" onMouseExited="#hoverOffMinBt" prefHeight="42.0" prefWidth="44.0" style="-fx-background-color: black; -fx-border-color: black;" text="-" textFill="WHITE">
+      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1073.0" layoutY="-12.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleMinAction" onMouseEntered="#hoverOnMinBt" onMouseExited="#hoverOffMinBt" prefHeight="53.0" prefWidth="35.0" style="-fx-background-color: black; -fx-border-color: black;" text="-" textFill="WHITE">
          <font>
-            <Font size="24.0" />
+            <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1106.0" layoutY="-3.0" mnemonicParsing="false" onAction="#handleCloseAction" onMouseEntered="#hoverOnCloseBt" onMouseExited="#hoverOffCloseBt" prefHeight="48.0" prefWidth="44.0" style="-fx-background-color: black; -fx-border-color: black;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
-      <Label layoutX="70.0" layoutY="5.0" text="InventoryManagement.exe" textFill="WHITE" />
-        <AnchorPane layoutX="-10.0" layoutY="46.0" prefHeight="42.0" prefWidth="1160.0" style="-fx-background-color: #1b1b1c;">
-            <Button fx:id="addButton" alignment="CENTER" layoutX="868.0" layoutY="5.0" mnemonicParsing="false" onAction="#addEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Add" textFill="WHITE">
+      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1106.0" layoutY="-9.0" mnemonicParsing="false" onAction="#handleCloseAction" onMouseEntered="#hoverOnCloseBt" onMouseExited="#hoverOffCloseBt" prefHeight="48.0" prefWidth="44.0" style="-fx-background-color: black; -fx-border-color: black;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
+      <Label layoutX="87.0" layoutY="8.0" text="InventoryManagement.exe" textFill="WHITE" />
+        <AnchorPane layoutX="-10.0" layoutY="35.0" prefHeight="53.0" prefWidth="1160.0" style="-fx-background-color: #1b1b1c;">
+            <Button fx:id="addButton" alignment="CENTER" layoutX="870.0" layoutY="11.0" mnemonicParsing="false" onAction="#addEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Add" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Button>
-            <TextField id="#FFA500" fx:id="descriptionTextFieldSN" alignment="CENTER" layoutX="24.0" layoutY="5.0" onMouseClicked="#handleClickSNTextField" prefHeight="27.0" prefWidth="238.0" promptText="Enter Serial Number here..." style="-fx-background-color: #1b1b1c; -fx-background-insets: 0 0 0 0; -fx-border-color: white; -fx-text-fill: white;" styleClass="text-field" stylesheets="@Application-Style.css">
+            <TextField id="#FFA500" fx:id="descriptionTextFieldSN" alignment="CENTER" layoutX="26.0" layoutY="11.0" onMouseClicked="#handleClickSNTextField" prefHeight="27.0" prefWidth="238.0" promptText="Enter Serial Number here..." style="-fx-background-color: #1b1b1c; -fx-background-insets: 0 0 0 0; -fx-border-color: white; -fx-text-fill: white;" styleClass="text-field" stylesheets="@Application-Style.css">
                 <font>
                     <Font name="System Bold Italic" size="13.0" />
                 </font>
@@ -44,17 +44,17 @@
                     <Glow />
                 </effect>
           </TextField>
-            <Button fx:id="deleteButton" alignment="CENTER" layoutX="984.0" layoutY="5.0" mnemonicParsing="false" onAction="#deleteEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Delete" textFill="WHITE">
+            <Button fx:id="deleteButton" alignment="CENTER" layoutX="986.0" layoutY="11.0" mnemonicParsing="false" onAction="#deleteEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Delete" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Button>
-            <Button fx:id="editButton" alignment="CENTER" layoutX="927.0" layoutY="5.0" mnemonicParsing="false" onAction="#editEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Edit" textFill="WHITE">
+            <Button fx:id="editButton" alignment="CENTER" layoutX="929.0" layoutY="11.0" mnemonicParsing="false" onAction="#editEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Edit" textFill="WHITE">
                 <font>
                     <Font size="13.0" />
                 </font>
             </Button>
-            <TextField fx:id="descriptionTextFieldName" alignment="CENTER" layoutX="273.0" layoutY="5.0" onMouseClicked="#handleClickNameTextField" prefHeight="25.0" prefWidth="366.0" promptText="Enter Name here..." style="-fx-background-color: #1b1b1c; -fx-background-insets: 0 0 0 0; -fx-border-color: white; -fx-text-fill: white;" styleClass="text-field" stylesheets="@Application-Style.css">
+            <TextField fx:id="descriptionTextFieldName" alignment="CENTER" layoutX="275.0" layoutY="11.0" onMouseClicked="#handleClickNameTextField" prefHeight="25.0" prefWidth="366.0" promptText="Enter Name here..." style="-fx-background-color: #1b1b1c; -fx-background-insets: 0 0 0 0; -fx-border-color: white; -fx-text-fill: white;" styleClass="text-field" stylesheets="@Application-Style.css">
                 <font>
                     <Font name="System Bold Italic" size="13.0" />
                 </font>
@@ -62,7 +62,7 @@
                     <Glow />
                 </effect>
             </TextField>
-            <TextField fx:id="descriptionTextFieldValue" alignment="CENTER" layoutX="650.0" layoutY="5.0" onMouseClicked="#handleClickValueTextField" prefHeight="27.0" prefWidth="205.0" promptText="Enter Value here..." style="-fx-background-color: #1b1b1c; -fx-background-insets: 0 0 0 0; -fx-border-color: white; -fx-text-fill: white;" styleClass="text-field" stylesheets="@Application-Style.css">
+            <TextField fx:id="descriptionTextFieldValue" alignment="CENTER" layoutX="652.0" layoutY="11.0" onMouseClicked="#handleClickValueTextField" prefHeight="27.0" prefWidth="205.0" promptText="Enter Value here..." style="-fx-background-color: #1b1b1c; -fx-background-insets: 0 0 0 0; -fx-border-color: white; -fx-text-fill: white;" styleClass="text-field" stylesheets="@Application-Style.css">
                 <font>
                     <Font name="System Bold Italic" size="13.0" />
                 </font>
@@ -70,7 +70,7 @@
                     <Glow />
                 </effect>
             </TextField>
-            <MenuButton alignment="TOP_RIGHT" layoutX="1056.0" layoutY="5.0" mnemonicParsing="false" popupSide="RIGHT" style="-fx-border-color: white; -fx-background-color: #1b1b1c; -fx-background-insets-color: #1b1b1c; -fx-background-insets-text-color: white;" text="Options" textFill="WHITE">
+            <MenuButton alignment="TOP_RIGHT" layoutX="1058.0" layoutY="11.0" mnemonicParsing="false" popupSide="RIGHT" style="-fx-border-color: white; -fx-background-color: #1b1b1c; -fx-background-insets-color: #1b1b1c; -fx-background-insets-text-color: white;" text="Options" textFill="WHITE">
                 <items>
                     <MenuItem mnemonicParsing="false" onAction="#deleteAllEntries" text="Delete All" />
                     <MenuItem mnemonicParsing="false" onAction="#searchSerialNumberOfEntries" text="Search (SN)" />
