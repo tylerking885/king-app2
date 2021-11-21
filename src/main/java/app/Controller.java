@@ -102,6 +102,8 @@ public class Controller implements Initializable {
         // Make the table view a static size.
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
+        table.setFixedCellSize(20);
+
         // Set the table view to the master ObservableList.
         table.setItems(listMaster);
     }
@@ -279,6 +281,9 @@ public class Controller implements Initializable {
 
             // Refresh the Description TextFields.
             refreshDescriptionFields();
+            revertSNTextField();
+            revertNameTextField();
+            revertValueTextField();
 
             // Technically after adding an entry there are now unsaved changes.
             unsavedChanges = true;
@@ -943,6 +948,7 @@ public class Controller implements Initializable {
                     descriptionTextFieldName.setText(name);
                     descriptionTextFieldValue.setText(value);
 
+
                     // Set a LocalEvent edit with the given serial number and name values.
                     localEventEdit.setSerialNumber(serialNumber);
                     localEventEdit.setName(name);
@@ -964,6 +970,9 @@ public class Controller implements Initializable {
 
                     // Wipe the TextFields
                     refreshDescriptionFields();
+                    revertSNTextField();
+                    revertNameTextField();
+                    revertValueTextField();
 
                     // Set a boolean variable tracking changes being made to true.
                     unsavedChanges = true;
@@ -978,8 +987,16 @@ public class Controller implements Initializable {
 
                 // Set the description Text fields again.
                 descriptionTextFieldSN.setText(String.valueOf(localEventEdit.getSerialNumber()));
+                descriptionTextFieldSN.setStyle("-fx-border-color: blue;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+
+                        "-fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;"+"-fx-text-fill: white;");
+
                 descriptionTextFieldName.setText(String.valueOf(localEventEdit.getName()));
+                descriptionTextFieldName.setStyle("-fx-border-color: blue;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+
+                        "-fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;"+"-fx-text-fill: white;");
+
                 descriptionTextFieldValue.setText(String.valueOf(localEventEdit.getValue()));
+                descriptionTextFieldValue.setStyle("-fx-border-color: blue;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+
+                        "-fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;"+"-fx-text-fill: white;");
 
                 // Change edit boolean to true
                 editModeToggle = true;
@@ -1043,12 +1060,82 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    protected void handleClickAction(MouseEvent event) {
+    protected void handleClickAnchorPaneAction(MouseEvent event) {
 
         // Logic for clicking on the anchor pane. -> Will be used with handle Movement.
         Stage stage = (Stage) anchorPane.getScene().getWindow();
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
+    }
+
+    @FXML
+    protected void handleClickSNTextField() {
+
+        descriptionTextFieldSN.setStyle("-fx-border-color: blue;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+
+                "-fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;"+"-fx-text-fill: white;");
+
+        if (descriptionTextFieldName.getText().isEmpty() && descriptionTextFieldValue.getText().isEmpty()) {
+            descriptionTextFieldName.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+            descriptionTextFieldValue.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+        else if (descriptionTextFieldValue.getText().isEmpty()) {
+
+            descriptionTextFieldValue.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+        else if (descriptionTextFieldName.getText().isEmpty()) {
+
+            descriptionTextFieldName.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+    }
+
+    @FXML
+    protected void handleClickNameTextField() {
+
+        descriptionTextFieldName.setStyle("-fx-border-color: blue;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+
+                "-fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;"+"-fx-text-fill: white;");
+
+        if (descriptionTextFieldValue.getText().isEmpty() && descriptionTextFieldSN.getText().isEmpty()) {
+            descriptionTextFieldSN.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+            descriptionTextFieldValue.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+        else if (descriptionTextFieldSN.getText().isEmpty()) {
+            descriptionTextFieldSN.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+        else if (descriptionTextFieldValue.getText().isEmpty()) {
+            descriptionTextFieldValue.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+    }
+
+    @FXML
+    protected void handleClickValueTextField() {
+
+        descriptionTextFieldValue.setStyle("-fx-border-color: blue;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+
+                "-fx-border-radius: 3 3 3 3, 3 3 3 3, 3 3 3 3, 3 3 3 3;"+"-fx-text-fill: white;");
+
+        if (descriptionTextFieldName.getText().isEmpty() && descriptionTextFieldSN.getText().isEmpty()) {
+            descriptionTextFieldName.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+            descriptionTextFieldSN.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+
+        else if (descriptionTextFieldSN.getText().isEmpty()) {
+            descriptionTextFieldSN.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+
+        else if (descriptionTextFieldName.getText().isEmpty()) {
+            descriptionTextFieldName.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+        }
+    }
+
+    public void revertSNTextField() {
+        descriptionTextFieldSN.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+    }
+
+    public void revertNameTextField() {
+        descriptionTextFieldName.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
+    }
+
+    public void revertValueTextField() {
+        descriptionTextFieldValue.setStyle("-fx-border-color: white;"+"-fx-background-color: #1b1b1c;"+"-fx-border-insets: 0, 0, 0, 0;"+"-fx-text-fill: white;");
     }
 
     @FXML
