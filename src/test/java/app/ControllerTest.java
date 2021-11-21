@@ -29,10 +29,13 @@ class ControllerTest {
         test.setMainTestList(testList);
         String duplicateSerial = "a-123-456-789";
         String uniqueSerial = "d-123-456-789";
+
+        // Testing validate Duplicate method here.
         assertTrue(test.validateDuplicateForEdit(uniqueSerial));
         assertFalse(test.validateDuplicateForEdit(duplicateSerial));
     }
 
+    // Testing for file not found exceptions
     @Test
     void testExceptionThrowOfOpenTSVFile() {
         Controller test1 = new Controller();
@@ -50,4 +53,6 @@ class ControllerTest {
             test1.openJSONFile(test);
         });
     }
+
+
 }

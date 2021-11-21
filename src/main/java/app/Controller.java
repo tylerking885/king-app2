@@ -86,7 +86,6 @@ public class Controller implements Initializable {
     ObservableList<LocalEvent> listMaster = FXCollections.observableArrayList();
     ObservableList<LocalEvent> listFiltered = FXCollections.observableArrayList();
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

@@ -10,7 +10,4 @@ module app {
     requires javafx.graphics;
     requires com.google.gson;
     requires org.jsoup;
-
-    exports app;
-    opens app to javafx.fxml;
 }
