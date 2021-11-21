@@ -30,7 +30,7 @@
 
 Managing an Inventory can be tedious and sometimes difficult. Hopefully this program can offer a way to make this process easier with an interesting look.
 
-[Back To The Top](#description)
+[Back To The Top](#table-of-contents)
 
 ---
 ## How To Use
@@ -54,7 +54,7 @@ In order to use the Add button 3 pre-Conditions must be met.
 > 
 > ![Project Image](src/main/resources/readmeImages/After-Add-Pressed.png)
 
-[Back To The Top](#add)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -71,7 +71,7 @@ In order to use the Delete button 1 pre-Condition must be met.
 > 
 > ![Project Image](src/main/resources/readmeImages/After-Delete-Pressed.png)
 
-[Back To The Top](#delete)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -87,7 +87,7 @@ DeleteAll may be used without any preconditions, however, it only makes sense to
 >
 > ![Project Image](src/main/resources/readmeImages/After-DeleteAll-Pressed.png)
 
-[Back To The Top](#delete-all)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -110,7 +110,7 @@ In order to use the Edit button 3 pre-Conditions must be met.
 >
 > The user must then Save their new edit.
 
-[Back To The Top](#edit)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -131,7 +131,7 @@ In order to use Search (SN) button 3 pre-Conditions must be met.
 > ![Project Image](src/main/resources/readmeImages/After-Search(SN)-Pressed.png)
 
 
-[Back To The Top](#search-sn)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -152,7 +152,7 @@ In order to use Search (Name) button 3 pre-Conditions must be met.
 > ![Project Image](src/main/resources/readmeImages/After-Search(SN)-Pressed.png)
 
 
-[Back To The Top](#search-name)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -174,7 +174,7 @@ In order to use Sort(SN) 1 pre-Condition must be met.
 > ![Project Image](src/main/resources/readmeImages/After-Sort(SN)-Pressed.png)
 
 
-[Back To The Top](#sort-sn)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -196,7 +196,7 @@ In order to use Sort(Name) 1 pre-Condition must be met.
 > ![Project Image](src/main/resources/readmeImages/After-Sort(Name)-Pressed.png)
 
 
-[Back To The Top](#sort-name)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -218,7 +218,7 @@ In order to use Sort(Value) 1 pre-Condition must be met.
 > ![Project Image](src/main/resources/readmeImages/After-Sort(Value)-Pressed.png)
 
 
-[Back To The Top](#sort-value)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -240,7 +240,7 @@ Saves the Contents of the table to 3 different file types: .json / .html / .txt 
 >
 > ![Project Image](src/main/resources/readmeImages/Unsaved-changes-warning.png)
 
-[Back To The Top](#save)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -259,7 +259,7 @@ Loads the contents of the file to the table. Handles 3 different file types: .js
 > ![Project Image](src/main/resources/readmeImages/After-Load-Pressed.png)
 
 
-[Back To The Top](#load)
+[Back To The Top](#table-of-contents)
 
 ---
 
@@ -269,4 +269,4 @@ Loads the contents of the file to the table. Handles 3 different file types: .js
 - Email - tylerking885@gmail.com
 
 
-[Back To The Top](#author-info)
+[Back To The Top](#table-of-contents)
