@@ -23,8 +23,12 @@
             <Font size="13.0" />
          </font>
       </MenuButton>
-      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1064.0" layoutY="1.0" mnemonicParsing="false" onAction="#handleMinAction" onMouseEntered="#hoverOnMinBt" onMouseExited="#hoverOffMinBt" prefHeight="42.0" prefWidth="42.0" style="-fx-background-color: black; -fx-border-color: black;" text="-" textFill="WHITE" />
-      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1106.0" layoutY="-4.0" mnemonicParsing="false" onAction="#handleCloseAction" onMouseEntered="#hoverOnCloseBt" onMouseExited="#hoverOffCloseBt" prefHeight="48.0" prefWidth="42.0" style="-fx-background-color: black; -fx-border-color: black;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
+      <Button fx:id="buttonMin" alignment="CENTER" layoutX="1063.0" layoutY="-6.0" mnemonicParsing="false" onAction="#handleMinAction" onMouseEntered="#hoverOnMinBt" onMouseExited="#hoverOffMinBt" prefHeight="42.0" prefWidth="44.0" style="-fx-background-color: black; -fx-border-color: black;" text="-" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonClose" alignment="CENTER" layoutX="1106.0" layoutY="-3.0" mnemonicParsing="false" onAction="#handleCloseAction" onMouseEntered="#hoverOnCloseBt" onMouseExited="#hoverOffCloseBt" prefHeight="48.0" prefWidth="44.0" style="-fx-background-color: black; -fx-border-color: black;" stylesheets="@../../../../../king-Application-impl-Clone/king-app1-impl/src/main/resources/app/application.css" text="X" textFill="WHITE" />
       <Label layoutX="70.0" layoutY="5.0" text="InventoryManagement.exe" textFill="WHITE" />
         <AnchorPane layoutX="-10.0" layoutY="46.0" prefHeight="42.0" prefWidth="1160.0" style="-fx-background-color: #1b1b1c;">
             <Button fx:id="addButton" alignment="CENTER" layoutX="868.0" layoutY="5.0" mnemonicParsing="false" onAction="#addEntry" style="-fx-border-color: white; -fx-background-color: #1b1b1c;" text="Add" textFill="WHITE">
