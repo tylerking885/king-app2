@@ -1392,7 +1392,7 @@ public class Controller implements Initializable {
     @FXML
     protected void handleClickAction(MouseEvent event) {
 
-        //
+        // Logic for clicking on the anchor pane. -> Will be used with handle Movement.
         Stage stage = (Stage) anchorPane.getScene().getWindow();
         xOffset = stage.getX() - event.getScreenX();
         yOffset = stage.getY() - event.getScreenY();
