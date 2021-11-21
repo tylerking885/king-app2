@@ -34,6 +34,7 @@ public class Controller implements Initializable {
 
     private boolean unsavedChanges = false;
     private boolean editModeToggle = false;
+    private boolean turnOffDialogueMessages = false;
 
     private double xOffset = 0;
     private double yOffset = 0;
@@ -1239,15 +1240,17 @@ public class Controller implements Initializable {
 
             // if any local event variables in the list match the key
             if (event.getSerialNumber().equals(key)) {
+                if (!turnOffDialogueMessages) {
 
-                // Create a new Alert object of type WARNING.
-                Alert alert = new Alert(Alert.AlertType.WARNING);
+                    // Create a new Alert object of type WARNING.
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
 
-                // Show alert and return false;
-                alert.setTitle("Validate Duplicate Serial Numbers");
-                alert.setHeaderText(null);
-                alert.setContentText("A Serial Number with given values already exists. Please give \"Unique\" entries only.");
-                alert.showAndWait();
+                    // Show alert and return false;
+                    alert.setTitle("Validate Duplicate Serial Numbers");
+                    alert.setHeaderText(null);
+                    alert.setContentText("A Serial Number with given values already exists. Please give \"Unique\" entries only.");
+                    alert.showAndWait();
+                }
                 return false;
             }
         }
@@ -1411,5 +1414,10 @@ public class Controller implements Initializable {
 
         // Revert to normal when not hovering on the button.
         buttonClose.setStyle("-fx-background-color: #1b1b1c;"+"-fx-border-color: white;");
+    }
+
+    public void setMainTestList(ObservableList<LocalEvent> listTest) {
+        listMaster = listTest;
+        turnOffDialogueMessages = true;
     }
 }
