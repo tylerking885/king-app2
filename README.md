@@ -28,7 +28,7 @@
 
 ## Description
 
-Managing an Inventory can be tedious and sometimes difficult. Hopefully this program can offer a way to make this process easier with an interesting look.
+Managing an Inventory can be tedious and sometimes difficult. This program offers a modern solution to this task at hand.
 
 [Back To The Top](#table-of-contents)
 
