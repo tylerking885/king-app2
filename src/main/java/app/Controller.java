@@ -1167,6 +1167,20 @@ public class Controller implements Initializable {
         buttonClose.setStyle("-fx-background-color: black;");
     }
 
+    @FXML
+    public void hoverOnMinBt(){
+
+        // Sets the color of the button to red when hovering on it.
+        buttonMin.setStyle("-fx-background-color: #fc0303;");
+    }
+
+    @FXML
+    public void hoverOffMinBt(){
+
+        // Revert to normal when not hovering on the button.
+        buttonMin.setStyle("-fx-background-color: black;");
+    }
+
     public void setMainTestList(ObservableList<LocalEvent> listTest) {
         listMaster = listTest;
         turnOffDialogueMessages = true;
