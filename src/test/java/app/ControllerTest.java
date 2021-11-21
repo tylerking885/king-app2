@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 2 Test
+ *  Copyright 2021 Tyler King
+ */
+
 package app;
 
 import com.google.gson.JsonArray;
