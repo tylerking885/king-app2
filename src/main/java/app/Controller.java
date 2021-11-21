@@ -117,7 +117,7 @@ public class Controller implements Initializable {
     // String variables used for Regex.
     String validateTitle = "Validate Fields";
     String SNFormat = "[a-zA-Z]-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}";
-    String valueFormat = "^\\$??(((\\d{1,3},?)(\\d{3},?)+|\\d{1,3})|\\d+)(\\.\\d{1,2})?$";
+    String valueFormat = "^\\$?(([1-9]\\d{0,2}(,\\d{3})*)|0)?\\.\\d{2}$";
 
     // Validates if any entries in the table are currently being selected.
     private boolean validateSelected(String validateTitle) {
@@ -140,362 +140,12 @@ public class Controller implements Initializable {
         return true;
     }
 
-    private boolean validateFields(String validateTitle) {
+    private boolean validateTextFields(String validateTitle) {
 
         //Create a new Alert object of type WARNING.
         Alert alert = new Alert(Alert.AlertType.WARNING);
 
-        // Case 1 : SN is empty / Name is empty / Value is empty
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, Name must be entered, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 2 : SN is empty / Name > 256 / Value is empty.
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName.getText().length() > 256) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, Name must not exceed 256 characters, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 3 : SN is empty / Name < 2 / Value is empty
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName.getText().length() < 2) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, Name must exceed 2 characters, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 4 : SN is empty / Value is empty
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 5 : SN is empty / Name is empty / Value wrong format
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, Name must be entered, and Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 6 : SN is empty / Name < 2 / Value wrong format
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName.getText().length() < 2) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, Name must exceed 2 characters, and Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 7 : SN is empty / Name > 256 / Value wrong format
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName.getText().length() > 256) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, Name must not exceed 256 characters, and Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 8 : SN wrong format / Name is empty / Value is empty
-        if ((!descriptionTextFieldSN.getText().matches(SNFormat)) &&
-                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must be entered, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 9 : SN wrong format / Name is empty / Value wrong format
-        if ((!descriptionTextFieldSN.getText().matches(SNFormat)) &&
-                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must be entered, and Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 10 : SN wrong format / Name < 2 / Value is empty
-        if ((!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldName.getText().length() < 2)) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must exceed 2 characters, Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 11 : SN wrong format / Name < 2 / Value wrong format
-        if ((!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldName.getText().length() < 2)) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must exceed 2 characters, and Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 12 : SN wrong format / Name > 256 / Value is empty
-        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldName.getText().length() > 256) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must not exceed 256, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 13 : SN wrong format / Name > 256 / Value wrong format
-        if ((!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldName.getText().length() > 256)) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, Name must exceed 256 characters, and Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 14 : SN is empty / Value wrong format
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty())) {
-            assert descriptionTextFieldValue != null;
-            if (!descriptionTextFieldValue.getText().matches(valueFormat)) {
-
-                alert.setTitle(validateTitle);
-                alert.setHeaderText(null);
-                alert.setContentText("A Serial Number must be entered, and Value must be positive and in #.## format.");
-                alert.showAndWait();
-
-                return false;
-            }
-        }
-
-        // Case 15 : SN is empty / Name is empty
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("A Serial Number must be entered, and the Name must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 16 : Name is empty / Value is empty
-        if ((descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("A Name must be entered, and Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 17 : Name is empty / Value format is wrong
-        if ((descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("A Name must be entered, and the Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 18 : Name > 256 / Value is empty
-        if ((descriptionTextFieldName.getText().length() > 256) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("The Name must exceed 256 characters, and the Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 19 : Name > 256 / Value wrong format
-        if ((descriptionTextFieldName.getText().length() > 256) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("The Name must exceed 256 characters, and the Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 20 : Name < 2 / Value is empty
-        if ((descriptionTextFieldName.getText().length() < 2) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("The Name must exceed 2 characters, and the Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 21 : Name < 2 / Value wrong format
-        if ((descriptionTextFieldName.getText().length() < 2) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("The Name must exceed 2 characters, and the Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 22 : SN is empty / Value wrong format
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("A Serial Number must be entered, and the Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 23 : SN wrong format / Value is empty
-        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty())) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, and a Value must be entered.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 24 : SN wrong format / Value wrong format
-        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (!descriptionTextFieldValue.getText().matches(valueFormat))) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, and the Value must be positive and in #.## format.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 25 : SN is empty / Name > 256
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName.getText().length() > 256)) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be entered, and the name must not exceed 256 characters.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 26 : SN wrong format / Name > 256
-        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldName.getText().length() > 256)) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("A Serial Number must be in A-XXX-XXX-XXX format, and the name must not exceed 256 characters.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 27 : SN is empty / Name < 2
-        if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty()) &&
-                (descriptionTextFieldName.getText().length() < 2)) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("A Serial Number must be entered, and the name must exceed 2 characters.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 28 : SN wrong format / Name < 2
-        if (!descriptionTextFieldSN.getText().matches(SNFormat) &&
-                (descriptionTextFieldName.getText().length() < 2)) {
-
-            alert.setTitle(validateTitle);
-            alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format, and the name must exceed 2 characters.");
-            alert.showAndWait();
-
-            return false;
-        }
-
-        // Case 29 : SN is empty
+        // Case 1 : SN is empty
         if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty())) {
 
             alert.setTitle(validateTitle);
@@ -506,7 +156,7 @@ public class Controller implements Initializable {
             return false;
         }
 
-        // Case 30 : Name is empty
+        // Case 2 : Name is empty
         if (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) {
 
             alert.setTitle(validateTitle);
@@ -517,7 +167,7 @@ public class Controller implements Initializable {
             return false;
         }
 
-        // Case 31 : Value is empty
+        // Case 3 : Value is empty
         if (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty()) {
 
             alert.setTitle(validateTitle);
@@ -528,7 +178,7 @@ public class Controller implements Initializable {
             return false;
         }
 
-        // Case 32 : SN wrong format
+        // Case 4 : SN wrong format
         if (!descriptionTextFieldSN.getText().matches(SNFormat)) {
             alert.setTitle(validateTitle);
             alert.setHeaderText(null);
@@ -538,7 +188,7 @@ public class Controller implements Initializable {
             return false;
         }
 
-        // Case 33 : Name > 256
+        // Case 5 : Name > 256
         if (descriptionTextFieldName.getText().length() > 256) {
 
             alert.setTitle(validateTitle);
@@ -549,7 +199,7 @@ public class Controller implements Initializable {
             return false;
         }
 
-        // Case 34 : Name < 2
+        // Case 6 : Name < 2
         if (descriptionTextFieldName.getText().length() < 2) {
 
             alert.setTitle(validateTitle);
@@ -560,7 +210,7 @@ public class Controller implements Initializable {
             return false;
         }
 
-        // Case 35 : Value wrong format
+        // Case 7 : Value wrong format
         if ((!descriptionTextFieldValue.getText().matches(valueFormat))) {
             alert.setTitle(validateTitle);
             alert.setHeaderText(null);
@@ -598,7 +248,7 @@ public class Controller implements Initializable {
     public void addEntry() {
 
         // Check if the entry to be added is valid.
-        if (validateFields(validateTitle) && validateDuplicateForAdd(validateTitle)) {
+        if (validateTextFields(validateTitle) && validateDuplicateForAdd(validateTitle)) {
 
             // Set a String variable to the TextField value.
             String value = descriptionTextFieldValue.getText();
@@ -626,11 +276,14 @@ public class Controller implements Initializable {
 
             // Set the table to the master list.
             table.setItems(listMaster);
+
             // Refresh the Description TextFields.
             refreshDescriptionFields();
+
+            // Technically after adding an entry there are now unsaved changes.
+            unsavedChanges = true;
         }
     }
-
 
     public void deleteEntry() {
 
@@ -976,7 +629,7 @@ public class Controller implements Initializable {
         try {
             document = Jsoup.parse(file, "UTF-8");
 
-        // catch an IOException and print the stack trace.
+            // catch an IOException and print the stack trace.
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1283,7 +936,7 @@ public class Controller implements Initializable {
                 boolean doDupCheck = !serialNumber.equals(backup);
 
                 // If the text fields are valid and dupCheck passes
-                if (validateFields(validateTitle) && (!doDupCheck||validateDuplicateForEdit(serialNumber))) {
+                if (validateTextFields(validateTitle) && (!doDupCheck||validateDuplicateForEdit(serialNumber))) {
 
                     // Get the event strings and set them in their respective text fields.
                     descriptionTextFieldSN.setText(serialNumber);
