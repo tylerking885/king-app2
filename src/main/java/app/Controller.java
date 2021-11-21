@@ -149,7 +149,7 @@ public class Controller implements Initializable {
 
         // Case 1 : SN is empty
         if ((descriptionTextFieldSN == null || descriptionTextFieldSN.getText().isEmpty())) {
-
+            revertSNTextField();
             alert.setTitle(validateTitle);
             alert.setHeaderText(null);
             alert.setContentText("A Serial Number must be entered.");
@@ -160,7 +160,7 @@ public class Controller implements Initializable {
 
         // Case 2 : Name is empty
         if (descriptionTextFieldName == null || descriptionTextFieldName.getText().isEmpty()) {
-
+            revertNameTextField();
             alert.setTitle(validateTitle);
             alert.setHeaderText(null);
             alert.setContentText("Item Name must be entered.");
@@ -171,7 +171,7 @@ public class Controller implements Initializable {
 
         // Case 3 : Value is empty
         if (descriptionTextFieldValue == null || descriptionTextFieldValue.getText().isEmpty()) {
-
+            revertValueTextField();
             alert.setTitle(validateTitle);
             alert.setHeaderText(null);
             alert.setContentText("A value must be entered.");
@@ -839,7 +839,7 @@ public class Controller implements Initializable {
                 }
 
                 // check if the string variable matches a result from the list.
-                if (event.getSerialNumber().equalsIgnoreCase(snSearchField)) {
+                if (event.getSerialNumber().equals(snSearchField)) {
 
                     // If found clear a filtered list.
                     listFiltered.clear();
@@ -852,6 +852,9 @@ public class Controller implements Initializable {
 
                     // set the table to the filtered list
                     table.setItems(listFiltered);
+
+                    revertSNTextField();
+                    refreshDescriptionFields();
 
                     // Finally, break from the loop.
                     break;
@@ -885,13 +888,16 @@ public class Controller implements Initializable {
                 }
 
                 // If found add the LocalEvent matched keyword to the filtered list
-                if (event.getName().equalsIgnoreCase(nameSearchField)) {
+                if (event.getName().equals(nameSearchField)) {
 
                     listFiltered.add(event);
                 }
             }
             // set the table to the filtered list
             table.setItems(listFiltered);
+
+            revertNameTextField();
+            refreshDescriptionFields();
         }
     }
 
