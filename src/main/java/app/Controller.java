@@ -1157,28 +1157,28 @@ public class Controller implements Initializable {
     public void hoverOnCloseBt(){
 
         // Sets the color of the button to red when hovering on it.
-        buttonClose.setStyle("-fx-background-color: #fc0303;");
+        buttonClose.setStyle("-fx-background-color: #fc0303;"+"-fx-border-insets: 0, 0, 0, 0;");
     }
 
     @FXML
     public void hoverOffCloseBt(){
 
         // Revert to normal when not hovering on the button.
-        buttonClose.setStyle("-fx-background-color: black;");
+        buttonClose.setStyle("-fx-background-color: black;"+"-fx-border-insets: 0, 0, 0, 0;");
     }
 
     @FXML
     public void hoverOnMinBt(){
 
         // Sets the color of the button to red when hovering on it.
-        buttonMin.setStyle("-fx-background-color: #fc0303;");
+        buttonMin.setStyle("-fx-background-color: #fc0303;"+"-fx-border-insets: 0, 0, 0, 0;");
     }
 
     @FXML
     public void hoverOffMinBt(){
 
         // Revert to normal when not hovering on the button.
-        buttonMin.setStyle("-fx-background-color: black;");
+        buttonMin.setStyle("-fx-background-color: black;"+"-fx-border-insets: 0, 0, 0, 0;");
     }
 
     public void setMainTestList(ObservableList<LocalEvent> listTest) {
