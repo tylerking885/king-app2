@@ -1164,7 +1164,7 @@ public class Controller implements Initializable {
     public void hoverOffCloseBt(){
 
         // Revert to normal when not hovering on the button.
-        buttonClose.setStyle("-fx-background-color: #1b1b1c;"+"-fx-border-color: white;");
+        buttonClose.setStyle("-fx-background-color: black;");
     }
 
     public void setMainTestList(ObservableList<LocalEvent> listTest) {
