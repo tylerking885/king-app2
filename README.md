@@ -103,11 +103,12 @@ In order to use the Edit button 2 pre-Conditions must be met.
 >
 > After pressing Edit:
 > 
-> The selection will then be displayed the Description Text Fields to be edited.
-> 
+> Edit button name changes from 'Edit' to 'Save'.
+> The entry to be edited will then be displayed in their respective Description Text Fields.
+>
 > ![Project Image](src/main/resources/readmeImages/After-Edit-Pressed.png)
 >
-> The user must then Save their new edit.
+> The user must then click Save to apply their new edit.
 
 [Back To The Top](#table-of-contents)
 
