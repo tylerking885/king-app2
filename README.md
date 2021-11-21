@@ -93,10 +93,9 @@ DeleteAll may be used without any preconditions, however, it only makes sense to
 
 ## Edit
 
-In order to use the Edit button 3 pre-Conditions must be met.
+In order to use the Edit button 2 pre-Conditions must be met.
 > 1) An entry must be selected before clicking Edit. Therefore, Edit may not be used on an empty table.
 > 2) All the text fields must contain valid entries for the edit to process.
-> 3) The new edit must not contain a Serial Number that matches any in the current table.
 
 > Edit process on an occupied table (Before pressing Edit):
 >
