@@ -92,12 +92,16 @@ public class Controller implements Initializable {
 
         // Set the serial number column for the table view.
         serialNumber.setCellValueFactory(new PropertyValueFactory<>("SerialNumber"));
+
         // Set the name column for the table view.
         name.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
         // Set the value column for the table view.
         value.setCellValueFactory(new PropertyValueFactory<>("Value"));
+
         // Make the table view a static size.
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         // Set the table view to the master ObservableList.
         table.setItems(listMaster);
     }
@@ -1241,6 +1245,7 @@ public class Controller implements Initializable {
             // if any local event variables in the list match the key
             if (event.getSerialNumber().equals(key)) {
                 if (!turnOffDialogueMessages) {
+
 
                     // Create a new Alert object of type WARNING.
                     Alert alert = new Alert(Alert.AlertType.WARNING);
