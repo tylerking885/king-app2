@@ -48,11 +48,11 @@ In order to use the Add button 3 pre-Conditions must be met.
 
 > Valid add process on an empty table:
 > 
-> ![Project Image](src/main/resources/readmeImages/Add-SS.png)
+> ![Project Image](src/main/resources/readmeImages/Before-Add-Pressed.png)
 >
 > After the entry was added:
 > 
-> ![Project Image](src/main/resources/readmeImages/Add-SS_After.png)
+> ![Project Image](src/main/resources/readmeImages/After-Add-Pressed.png)
 
 [Back To The Top](#add)
 
