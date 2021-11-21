@@ -123,7 +123,7 @@ In order to use the Edit button 2 pre-Conditions must be met.
 
 ## Search (SN)
 
-In order to use Search (SN) button 3 pre-Conditions must be met.
+In order to use Search (SN) button 2 pre-Conditions must be met.
 > 1) The Serial Number field must be entered and in valid format.
 > 2) An entry matching the typed Serial Number exactly must exist in the table.
 
@@ -144,7 +144,7 @@ In order to use Search (SN) button 3 pre-Conditions must be met.
 
 ## Search (Name)
 
-In order to use Search (Name) button 3 pre-Conditions must be met.
+In order to use Search (Name) button 2 pre-Conditions must be met.
 > 1) The Name field must be entered and in valid format.
 > 2) An entry matching the typed Name exactly must exist in the table.
 
