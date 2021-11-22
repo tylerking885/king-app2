@@ -243,8 +243,9 @@ Saves the Contents of the table to 3 different file types: .json / .html / .txt 
 > The file chooser window appears for the user to enter save information.
 >
 > ![Project Image](src/main/resources/readmeImages/After-Save-Pressed.png)
-> 
->  If additional changes were made upon closing the program, an alert window will display notifying the user of unsaved changes and will verify if you wish to truly wish to quit.
+
+Note: An unsaved changes warning message is shown if the user tries to terminate the program after adding, deleting, editing, or sorting.
+>  The user has the choice to CANCEL and save or click OK and terminate.
 >
 > ![Project Image](src/main/resources/readmeImages/Unsaved-changes-warning.png)
 
