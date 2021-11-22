@@ -33,6 +33,7 @@ Managing an Inventory can be tedious and sometimes difficult. This program offer
 [Back To The Top](#table-of-contents)
 
 ---
+
 ## How To Use
 
 Below are details on the features of the program with included screenshots.
