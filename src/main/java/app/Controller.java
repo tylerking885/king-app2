@@ -86,6 +86,7 @@ public class Controller implements Initializable {
     ObservableList<LocalEvent> listMaster = FXCollections.observableArrayList();
     ObservableList<LocalEvent> listFiltered = FXCollections.observableArrayList();
 
+    // Initialize table and Columns
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -807,7 +808,7 @@ public class Controller implements Initializable {
             // Show alert and return false;
             alert.setTitle(validateTitle);
             alert.setHeaderText(null);
-            alert.setContentText("Serial Number must be positive and in #.## format.");
+            alert.setContentText("Serial Number must be in A-XXX-XXX-XXX format.");
             alert.showAndWait();
 
             return false;
